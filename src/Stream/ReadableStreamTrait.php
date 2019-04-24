@@ -13,8 +13,12 @@ trait ReadableStreamTrait
     protected $chunkSize = 8192;
     protected $pause = true;
     protected $isReading = false;
+    protected $offset = 0;
     private $sizeLookupPromise;
 
+    public function setOffset(int $offset){
+        $this->offset = $offset;
+    }
     public function resume()
     {
         if (!$this->pause || $this->isReading) {
@@ -30,7 +34,7 @@ trait ReadableStreamTrait
                 }
 
                 $this->size = $info['size'];
-                $this->readCursor = 0;
+                $this->readCursor = !empty($this->offset)?$this->offset:0;
             });
         }
 
